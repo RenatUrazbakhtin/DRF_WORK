@@ -36,3 +36,8 @@ class PaymentListSerializer(serializers.ModelSerializer):
             data['lesson'] = lesson
 
         return data
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payments
+        fields = '__all__'
