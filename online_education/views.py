@@ -4,16 +4,19 @@ from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ViewSet
 
-from online_education.models import Course, Lesson, Payments
+from online_education.models import Course, Lesson, Payments, Subscription
+from online_education.paginators import CoursePaginator
 from online_education.permissions import IsOwnerOrManager, IsStaff
-from online_education.serializers import CourseSerializer, LessonSerializer, PaymentListSerializer, PaymentSerializer
+from online_education.serializers import CourseSerializer, LessonSerializer, PaymentListSerializer, PaymentSerializer, \
+    SubscriptionSerializer
+from online_education.validators import URLValidator
 
 
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-
+    pagination_class = CoursePaginator
     def get_permissions(self):
         if self.action in ['delete', 'create']:
             permission_classes = [IsStaff]
@@ -35,6 +38,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
+    pagination_class = CoursePaginator
 
     def get_queryset(self):
         user = self.request.user
@@ -69,3 +73,14 @@ class PaymentListAPIView(generics.ListAPIView):
 class PaymentUpdateAPIView(generics.UpdateAPIView):
     serializer_class = PaymentSerializer
     queryset = Payments.objects.all()
+
+class SubscriptionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializer
+    def perform_create(self, serializer):
+        new_lesson = serializer.save()
+        new_lesson.owner = self.request.user
+        new_lesson.save()
+
+class SubscriptionDestroyAPIView(generics.DestroyAPIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
