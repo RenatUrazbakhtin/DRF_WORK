@@ -77,9 +77,10 @@ class PaymentUpdateAPIView(generics.UpdateAPIView):
 class SubscriptionCreateAPIView(generics.CreateAPIView):
     serializer_class = SubscriptionSerializer
     def perform_create(self, serializer):
-        new_lesson = serializer.save()
-        new_lesson.owner = self.request.user
-        new_lesson.save()
+        subscription = serializer.save()
+        subscription.subscriber = self.request.user
+        subscription.save()
+
 
 class SubscriptionDestroyAPIView(generics.DestroyAPIView):
     serializer_class = SubscriptionSerializer
