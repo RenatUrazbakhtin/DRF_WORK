@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 import online_education
 from online_education.apps import OnlineEducationConfig
 from online_education.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView, \
-    LessonUpdateAPIView, LessonDestroyAPIView, PaymentListAPIView, PaymentUpdateAPIView
+    LessonUpdateAPIView, LessonDestroyAPIView, PaymentListAPIView, PaymentUpdateAPIView, SubscriptionCreateAPIView, \
+    SubscriptionDestroyAPIView
 
 app_name = OnlineEducationConfig.name
 
@@ -20,4 +21,7 @@ urlpatterns = [
 
     path('payments/', PaymentListAPIView.as_view(), name='payment-list'),
     path('payments/update/<int:pk>/', PaymentUpdateAPIView.as_view(), name='payment-update'),
+
+    path('subscription/create/', SubscriptionCreateAPIView.as_view(), name='subscription-create'),
+    path('subscription/delete/<int:pk>/', SubscriptionDestroyAPIView.as_view(), name='subscription-delete'),
 ] + router.urls
