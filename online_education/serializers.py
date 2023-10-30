@@ -14,7 +14,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    # subscription = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()
     lesson_count = serializers.SerializerMethodField(read_only=True)
     lessons = LessonSerializer(source='course', many=True)
     name = serializers.CharField(validators=[URLValidator()], required=False)
@@ -24,18 +24,19 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
 
-    # def get_subscription(self, instance):
-    #     request = self.context.get('request')
-    #     try:
-    #         subscription = Subscription.objects.get(
-    #             course_id=instance.pk,
-    #             subscriber_id=request.user.pk,
-    #         )
-    #     except ObjectDoesNotExist:
-    #         return False
-    #
-    #     else:
-    #         return subscription.is_subscriber
+    def get_subscription(self, value):
+        try:
+            subscription = Subscription.objects.get(
+                course=value.pk,
+                subscriber=self.context['request'].user.pk,
+            )
+        except ObjectDoesNotExist:
+            return False
+
+        else:
+            return subscription.is_subscriber
+
+
     def get_lesson_count(self, instance):
         return instance.course.count()
 

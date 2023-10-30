@@ -38,7 +38,7 @@ class Lesson(models.Model):
 class Payments(models.Model):
     payment_choice = [('cash', 'Наличные'), ('bank_transfer', 'Перевод на счет')]
 
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='клиент', **NULLABLE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='клиент', **NULLABLE)
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='дата оплаты', **NULLABLE)
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='оплаченный урок', **NULLABLE)
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='оплаченный курс', **NULLABLE)
@@ -46,4 +46,14 @@ class Payments(models.Model):
     payment_method = models.CharField(choices=payment_choice, verbose_name='способ оплаты', **NULLABLE)
 
 
+class Subscription(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс подписки')
+    subscriber = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='подписчик курса', **NULLABLE)
+    is_subscriber = models.BooleanField(default=False, verbose_name='знак подписки')
 
+    def __str__(self):
+        return f'{self.subscriber} и знак подписки {self.is_subscriber}'
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
