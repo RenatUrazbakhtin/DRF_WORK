@@ -16,9 +16,7 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     subscription = serializers.SerializerMethodField()
     lesson_count = serializers.SerializerMethodField(read_only=True)
-    lessons = LessonSerializer(source='course', many=True)
-    name = serializers.CharField(validators=[URLValidator()], required=False)
-    description = serializers.CharField(validators=[URLValidator()], required=False)
+    lessons = LessonSerializer(source='course', many=True, read_only=True)
 
     class Meta:
         model = Course

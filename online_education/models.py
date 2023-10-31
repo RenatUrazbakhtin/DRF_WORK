@@ -43,7 +43,7 @@ class Payments(models.Model):
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='оплаченный урок', **NULLABLE)
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='оплаченный курс', **NULLABLE)
     payment_amount = models.PositiveIntegerField(verbose_name='стоимость', **NULLABLE)
-    payment_method = models.CharField(choices=payment_choice, verbose_name='способ оплаты', **NULLABLE)
+    payment_method = models.CharField(max_length=30, choices=payment_choice, verbose_name='способ оплаты', **NULLABLE)
 
 
 class Subscription(models.Model):
