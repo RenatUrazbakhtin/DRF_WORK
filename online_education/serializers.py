@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from online_education.models import Course, Lesson, Payments, Subscription
+from online_education.services import create_session_and_take_url
 from online_education.validators import URLValidator
 
 
@@ -18,6 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
     lesson_count = serializers.SerializerMethodField(read_only=True)
     lessons = LessonSerializer(source='course', many=True, read_only=True)
 
+    payment_url = serializers.SerializerMethodField()
     class Meta:
         model = Course
         fields = '__all__'
@@ -37,6 +39,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lesson_count(self, instance):
         return instance.course.count()
+
+    def get_payment_url(self, instance):
+        return create_session_and_take_url(instance)
 
 
 class PaymentListSerializer(serializers.ModelSerializer):
