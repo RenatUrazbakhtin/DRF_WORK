@@ -47,11 +47,14 @@ INSTALLED_APPS = [
     'online_education',
     'django_filters',
     'rest_framework_simplejwt',
+    'drf_yasg',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -150,3 +153,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+STRIPE_API_KEY = "sk_test_51O7JDOBZw56Mn0AflvdWp6OjUlDjPx0Udd1gKhheMIeYU7ZDjwJpvLEKhI8Zh54NsxPKBue1SCCAHoMzlqGCWDhz0005vp5J62"
