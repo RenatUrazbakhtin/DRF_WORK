@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ViewSet
 
 from online_education.models import Course, Lesson, Payments, Subscription
@@ -9,6 +10,7 @@ from online_education.paginators import CoursePaginator
 from online_education.permissions import IsOwnerOrManager, IsStaff
 from online_education.serializers import CourseSerializer, LessonSerializer, PaymentListSerializer, PaymentSerializer, \
     SubscriptionSerializer
+from online_education.tasks import send_newsletter
 from online_education.validators import URLValidator
 
 
@@ -17,6 +19,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = CoursePaginator
+    permission_classes = [AllowAny]
     def get_permissions(self):
         if self.action in ['delete', 'create']:
             permission_classes = [IsStaff]
@@ -27,6 +30,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        updated_course = serializer.save()
+        send_newsletter.delay(updated_course.pk)
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
@@ -77,10 +86,13 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
     serializer_class = SubscriptionSerializer
     def perform_create(self, serializer):
         subscription = serializer.save()
-        subscription.subscriber = self.request.user
         subscription.save()
 
 
 class SubscriptionDestroyAPIView(generics.DestroyAPIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
+class SubscriptionListAPIView(generics.ListAPIView):
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()
