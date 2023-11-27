@@ -91,9 +91,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
+        'NAME': 'drf_work',
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'db'
     }
 }
 
@@ -173,7 +174,7 @@ CSRF_TRUSTED_ORIGINS = [
 STRIPE_API_KEY = "sk_test_51O7JDOBZw56Mn0AflvdWp6OjUlDjPx0Udd1gKhheMIeYU7ZDjwJpvLEKhI8Zh54NsxPKBue1SCCAHoMzlqGCWDhz0005vp5J62"
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
