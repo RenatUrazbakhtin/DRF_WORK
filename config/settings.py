@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'drf_work',
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': 'db'
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST')
     }
 }
 
@@ -171,7 +171,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
 
-STRIPE_API_KEY = "sk_test_51O7JDOBZw56Mn0AflvdWp6OjUlDjPx0Udd1gKhheMIeYU7ZDjwJpvLEKhI8Zh54NsxPKBue1SCCAHoMzlqGCWDhz0005vp5J62"
+STRIPE_API_KEY = os.getenv('STRIPE_API')
 
 
 CELERY_BROKER_URL = 'redis://redis:6379'

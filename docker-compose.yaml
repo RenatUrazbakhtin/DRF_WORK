@@ -6,7 +6,6 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_PASSWORD=kloping6
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - pg_data:/var/lib/postgresql/data/pgdata
