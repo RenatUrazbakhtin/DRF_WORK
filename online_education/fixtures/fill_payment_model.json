@@ -1,0 +1,26 @@
+[
+  {
+    "model": "online_education.Payments",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "payment_date": "2013-02-27T13:57:21.836+0000",
+      "paid_lesson": 1,
+      "paid_course": 1,
+      "payment_amount": 1000,
+      "payment_method": "Наличные"
+    }
+  },
+  {
+    "model": "online_education.Payments",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "payment_date": "2013-02-27T13:57:21.836+0000",
+      "paid_lesson": 2,
+      "paid_course": 1,
+      "payment_amount": "200",
+      "payment_method": "Перевод на счет"
+    }
+  }
+]
